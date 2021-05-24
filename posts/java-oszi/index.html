@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Christopher Voigtmann">
+    <meta name="description" content="https://chrisvoi.github.io">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta property="og:site_name" content="Christopher Voigtmann">
+    <meta property="og:title" content="
+  Java Signalgenerator - Christopher Voigtmann
+">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chrisvoi.github.io/posts/java-oszi/">
+    <meta property="og:image" content="https://chrisvoi.github.io">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="https://chrisvoi.github.io/posts/java-oszi/">
+    <meta name="twitter:image" content="https://chrisvoi.github.io">
+
+    <base href="https://chrisvoi.github.io/posts/java-oszi/">
+    <title>
+  Java Signalgenerator - Christopher Voigtmann
+</title>
+
+    <link rel="canonical" href="https://chrisvoi.github.io/posts/java-oszi/">
+    
+    <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700">
+    <link rel="stylesheet" href="/css/normalize.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    
+      <link rel="alternate" href="https://chrisvoi.github.io/index.xml" type="application/rss+xml" title="Christopher Voigtmann">
+      <link href="https://chrisvoi.github.io/index.xml" rel="feed" type="application/rss+xml" title="Christopher Voigtmann" />
+    
+
+    <meta name="generator" content="Hugo 0.83.1" />
+  </head>
+
+  <body class="">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">Christopher Voigtmann</a>
+    <input type="checkbox" id="menu-control"/>
+    <label class="menu-mobile  float-right " for="menu-control">
+      <span class="btn-mobile  float-right ">&#9776;</span>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/about">About</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/posts">Previous Work</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/competences">Competences</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/contact">Contact</a>
+            </li>
+          
+        
+        
+      </ul>
+    </label>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+  <article>
+    <header>
+      <h1 class="title">Java Signalgenerator</h1>
+      <h2 class="date">March 5, 2020</h2>
+
+      
+    </header>
+
+    <p><img src="/images/javaoszi.JPG" alt="javaoszi"></p>
+<p>Das Projekt für die Darstellung einer Oszilloskope Frontblende bestand aus Fünf Teilaufgaben. Mein Teil bestand aus der Verarbeitung und Visualisierung der Werte eines vorgegebenen &ldquo;Data-Buffers&rdquo;, bwz. eines Signalgenerators.
+Interessant war dabei die Umsetzung des Ringspeichers in den Graphen und die Wertweitergabe im Array.</p>
+<h5 id="code-databuffer">Code DataBuffer</h5>
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataBuffer</span>
+<span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">double</span> <span class="o">[]</span> <span class="n">data</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span><span class="o">,</span> <span class="n">index</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">count</span><span class="o">;</span>
+    
+    <span class="kd">public</span> <span class="nf">DataBuffer</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">double</span> <span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">input</span> <span class="o">(</span><span class="kt">double</span> <span class="n">value</span><span class="o">)</span>
+    <span class="o">{</span>       
+        <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">index</span> <span class="o">+</span> <span class="n">1</span><span class="o">)</span> <span class="o">%</span> <span class="n">size</span><span class="o">;</span>
+        <span class="n">data</span> <span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+        <span class="n">count</span><span class="o">++;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getValue</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="o">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="o">)</span> <span class="o">%</span> <span class="n">size</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">data</span> <span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="n">0</span><span class="o">.</span><span class="na">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getCount</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">count</span><span class="o">;</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h5 id="code-dataview">Code DataView</h5>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">import javax.swing.*;
+import java.awt.*;
+
+
+
+//Objekt der Klasse Databuffer
+public class DataView extends JComponent {
+
+private DataBuffer data;
+private int steps;
+private double deltat;
+private double ymin, ymax;
+private int mode;
+private int [] x, y;
+
+
+public DataView (DataBuffer db, int stps, double dt, double ymi, double yma, int mod)
+{
+setPreferredSize (new Dimension (850, 500));
+data = db; //DataBuffer, der angezeigt wird
+steps = stps; //Anzahl der Werte, die angezeigt werden - 1. Sollte kleiner als der size-Wert des DataBuffers sein.
+deltat = dt; //Zeitdifferenz von einem Wert zum nächsten
+ymin = ymi; //Minimaler und maximaler darstellbarer Wert
+ymax = yma;
+mode = mod; //Anzeigemode (0 oder 1)
+x = new int [steps];
+y = new int [steps];
+
+
+}
+
+
+public void paintComponent (Graphics g)
+{
+
+Graphics2D g2 = (Graphics2D) g; //Grafik-Kontext holen
+
+//Rechteck (Rahmen) fuer Werte definieren
+g2.setPaint (Color.black);
+g2.setStroke (new BasicStroke (2));
+int h = (int)ymax + 1 - (int)ymin +1;
+int b = (int)steps+1;
+int x0 = 100;
+int y0 = 100;
+g2.drawRect ( x0,y0, b, h);
+g2.setStroke (new BasicStroke (2));
+g2.drawLine (x0, (int) (ymax) + y0, x0 + b,(int)(ymax) + y0);
+String str;
+
+str = String.valueOf(steps+1);
+g2.drawString(str, x0-20, y0+h+20);
+
+str = String.valueOf(0);
+g2.drawString(str,b+x0-10, y0+h+20);
+
+str = String.valueOf(ymin);
+g2.drawString(str,b+x0+10, y0+h-5);
+
+str = String.valueOf(ymax);
+g2.drawString(str,b+x0+10, y0+5);
+
+
+
+
+if(mode==0)
+{
+// Werte mittels Polyline als Graf zeichnen
+// Koordinaten in Feld schreiben:
+
+
+	for (int i = 0; i &lt; steps; i++)
+	{
+	
+
+
+	y [i] = (int) (ymax+y0 - h/2 *data.getValue(i) );
+	x [i] = x0+b -(((int)deltat+i));
+	}
+
+
+
+g2.setPaint (Color.blue);
+g2.setStroke (new BasicStroke (1));
+g2.drawPolyline (x, y, steps); // Funktion zeichnen
+
+}
+if (mode==1)
+{
+	int s = (int) ((data.getCount () % steps));
+	
+	  
+	for (int j = 0; j &lt; s; j++)
+	{
+		
+	
+		
+		 
+	y [j] = (int) (y0+ymax+h/2*data.getValue((int) (+(data.getCount () % steps))-j) );
+	
+	x [j] = x0 +(((int)j));
+	
+	
+
+	}
+	g2.setPaint (Color.blue);
+	g2.setStroke (new BasicStroke (1));
+	g2.drawPolyline (x, y, s);
+	
+	
+	for (int j=s;j&lt;steps;j++)
+	{
+		int k = j-s;
+		y [k] = (int) (y0+ymax+h/2*data.getValue((int) (s+steps-j)));
+		
+		x [k] = x0 +(((int)deltat+j));
+		
+	}
+	
+
+
+
+g2.setPaint (Color.red);
+g2.setStroke (new BasicStroke (1));
+g2.drawPolyline (x, y, steps-s); // Funktion zeichnen
+
+g2.setPaint(Color.gray);
+g2.setStroke (new BasicStroke (3));
+g2.drawLine(x0+s, y0, x0+s, (int)(y0+ymax-ymin) );
+	
+}
+}
+
+void setBuffer (DataBuffer db)
+{
+data = db;
+}
+
+void setTRange (int stps, double dt)
+{
+steps = stps;
+deltat = dt;
+}
+
+void setYRange (double ymi, double yma)
+{
+ymin = ymi;
+ymax = yma;
+
+}
+
+void setMode (int mod)
+{
+mode = mod;
+}
+
+}
+
+</code></pre></div><h5 id="code-dataviewtest">Code DataViewTest</h5>
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kn">import</span> <span class="nn">java.awt.event.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.Timer</span><span class="o">;</span>
+
+
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataViewTest</span> <span class="kd">extends</span> <span class="n">JFrame</span> <span class="kd">implements</span> <span class="n">ActionListener</span> <span class="o">{</span>
+
+	
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">250</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">DataView</span> <span class="n">view</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">DataBuffer</span> <span class="n">buff</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="nf">DataViewTest</span> <span class="o">()</span>
+	<span class="o">{</span>
+		<span class="n">buff</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DataBuffer</span><span class="o">(</span><span class="n">size</span><span class="o">);</span>
+		<span class="c1">// Übergabewerte für DataBuffer anpassen
+</span><span class="c1"></span>		<span class="n">view</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DataView</span><span class="o">(</span><span class="n">buff</span><span class="o">,</span><span class="n">size</span><span class="o">-</span><span class="n">1</span><span class="o">,</span><span class="n">2</span><span class="o">,-</span><span class="n">60</span><span class="o">,</span><span class="n">60</span><span class="o">,</span><span class="n">0</span><span class="o">);</span>
+		<span class="n">add</span><span class="o">(</span><span class="n">view</span><span class="o">);</span>
+		
+		<span class="n">Timer</span> <span class="n">tim</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Timer</span> <span class="o">(</span><span class="n">100</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+		<span class="n">tim</span><span class="o">.</span><span class="na">start</span> <span class="o">();</span>
+		
+		
+		
+		 <span class="n">setTitle</span> <span class="o">(</span><span class="s">&#34;DataViewTest&#34;</span><span class="o">);</span>  <span class="c1">// Titel setzen
+</span><span class="c1"></span>	      <span class="n">setSize</span> <span class="o">(</span><span class="n">400</span><span class="o">,</span> <span class="n">200</span><span class="o">);</span>   <span class="c1">// Größe: 400 x 200 Pixel
+</span><span class="c1"></span>	      <span class="n">setVisible</span> <span class="o">(</span><span class="kc">true</span><span class="o">);</span>    <span class="c1">// sichtbar machen
+</span><span class="c1"></span>	      <span class="n">setDefaultCloseOperation</span> 
+	      <span class="o">(</span><span class="n">JFrame</span><span class="o">.</span><span class="na">EXIT_ON_CLOSE</span><span class="o">);</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// TODO Auto-generated method stub
+</span><span class="c1"></span>		<span class="n">DataViewTest</span> <span class="n">dvt</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DataViewTest</span><span class="o">();</span>
+		<span class="n">DataBuffer</span> <span class="n">db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DataBuffer</span> <span class="o">(</span><span class="n">300</span><span class="o">);</span>
+	
+	<span class="c1">//	dvt.view.setTRange(800,20); OK
+</span><span class="c1"></span>	<span class="c1">//	dvt.view.setYRange(-80, +80); OK
+</span><span class="c1"></span>	<span class="c1">//	dvt.view.setMode(1);OK
+</span><span class="c1"></span>		
+		<span class="c1">//System.out.println(ts.zahl);
+</span><span class="c1"></span>	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="n">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// TODO Auto-generated method stub
+</span><span class="c1"></span>		<span class="n">buff</span><span class="o">.</span><span class="na">input</span><span class="o">((</span><span class="kt">double</span><span class="o">)((</span><span class="n">Math</span><span class="o">.</span><span class="na">random</span><span class="o">()*</span><span class="n">2</span><span class="o">-</span><span class="n">1</span><span class="o">)));</span>
+	
+		<span class="n">view</span><span class="o">.</span><span class="na">repaint</span><span class="o">();</span>
+		
+		
+		
+	<span class="o">}</span>
+
+<span class="o">}</span>
+
+</code></pre></div>
+  </article>
+
+  <br/>
+
+  
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+  
+</section>
+
+      </div>
+      
+    </main>
+
+    
+
+  <script src="/js/app.js"></script>
+  
+  </body>
+</html>

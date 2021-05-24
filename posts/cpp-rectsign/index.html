@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Christopher Voigtmann">
+    <meta name="description" content="https://chrisvoi.github.io">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta property="og:site_name" content="Christopher Voigtmann">
+    <meta property="og:title" content="
+  C&#43;&#43; Signalgenerator - Christopher Voigtmann
+">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chrisvoi.github.io/posts/cpp-rectsign/">
+    <meta property="og:image" content="https://chrisvoi.github.io">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="https://chrisvoi.github.io/posts/cpp-rectsign/">
+    <meta name="twitter:image" content="https://chrisvoi.github.io">
+
+    <base href="https://chrisvoi.github.io/posts/cpp-rectsign/">
+    <title>
+  C&#43;&#43; Signalgenerator - Christopher Voigtmann
+</title>
+
+    <link rel="canonical" href="https://chrisvoi.github.io/posts/cpp-rectsign/">
+    
+    <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700">
+    <link rel="stylesheet" href="/css/normalize.min.css">
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    
+      <link rel="alternate" href="https://chrisvoi.github.io/index.xml" type="application/rss+xml" title="Christopher Voigtmann">
+      <link href="https://chrisvoi.github.io/index.xml" rel="feed" type="application/rss+xml" title="Christopher Voigtmann" />
+    
+
+    <meta name="generator" content="Hugo 0.83.1" />
+  </head>
+
+  <body class="">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">Christopher Voigtmann</a>
+    <input type="checkbox" id="menu-control"/>
+    <label class="menu-mobile  float-right " for="menu-control">
+      <span class="btn-mobile  float-right ">&#9776;</span>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/about">About</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/posts">Previous Work</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/competences">Competences</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://chrisvoi.github.io/contact">Contact</a>
+            </li>
+          
+        
+        
+      </ul>
+    </label>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+  <article>
+    <header>
+      <h1 class="title">C&#43;&#43; Signalgenerator</h1>
+      <h2 class="date">September 18, 2020</h2>
+
+      
+    </header>
+
+    <p><img src="/images/qtrect.JPG" alt="qtrect"></p>
+<p>Mit der Programmierumgebung QT habe ich einen Rechtecksignal-Generator erstellt. Wie dieser im Detail funktioniert, ist in dem Post für den Signalgenarator auf Java Basis zu sehen. Bei QT ging es viel mehr um die Erstellung eines User-Interfaces mit Hilfe der vorgegebenen Zeichenmöglichkeiten. Daher ist hier auch nur der Code für das &ldquo;Mainwindow&rdquo; zu sehen.</p>
+<h5 id="code-mainwindow-header">Code Mainwindow Header</h5>
+<div class="highlight"><pre class="chroma"><code class="language-cpp" data-lang="cpp">
+<span class="cp">#ifndef MAINWINDOW_H
+</span><span class="cp">#define MAINWINDOW_H
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;QMainWindow&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;rectangleData.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;dataBuffer.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;QTimer&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;QPaintEvent&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;QPainter&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;QMouseEvent&gt;</span><span class="cp">
+</span><span class="cp"></span>
+
+<span class="n">QT_BEGIN_NAMESPACE</span>
+<span class="k">namespace</span> <span class="n">Ui</span> <span class="p">{</span> <span class="k">class</span> <span class="nc">MainWindow</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">QT_END_NAMESPACE</span>
+
+<span class="k">class</span> <span class="nc">MainWindow</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QMainWindow</span>
+<span class="p">{</span>
+    <span class="n">Q_OBJECT</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">MainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">MainWindow</span><span class="p">();</span>
+
+<span class="k">private</span> <span class="nl">slots</span><span class="p">:</span>
+    <span class="kt">void</span> <span class="n">on_pushStart_clicked</span><span class="p">();</span>
+
+    <span class="kt">void</span> <span class="nf">on_pushStop_clicked</span><span class="p">();</span>
+
+    <span class="kt">void</span> <span class="nf">on_pushRestart_clicked</span><span class="p">();</span>
+
+</code></pre></div><h5 id="code-mainwindow-main">Code Mainwindow Main</h5>
+<div class="highlight"><pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="cp">#include</span> <span class="cpf">&#34;mainwindow.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;ui_mainwindow.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="n">MainWindow</span><span class="o">::</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">)</span>
+    <span class="o">:</span><span class="n">QMainWindow</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+    <span class="p">,</span><span class="n">ui</span><span class="p">(</span><span class="k">new</span> <span class="n">Ui</span><span class="o">::</span><span class="n">MainWindow</span><span class="p">),</span><span class="n">minValue</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">),</span><span class="n">maxValue</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="n">n</span><span class="p">(</span><span class="mi">75</span><span class="p">),</span><span class="n">noise</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="n">curN</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">,</span><span class="n">scaleMax</span><span class="p">(</span><span class="mi">25</span><span class="p">),</span><span class="n">scaleMin</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">),</span><span class="n">delta</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">xScale</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">mPosX</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">mPosY</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">mWert</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">,</span><span class="n">run</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span><span class="n">mousInFrame</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span>
+    <span class="p">,</span><span class="n">myRect</span><span class="p">(</span><span class="n">minValue</span><span class="p">,</span><span class="n">maxValue</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">noise</span><span class="p">)</span> <span class="c1">//Initialisiere Rechteck-Generator
+</span><span class="c1"></span>    <span class="p">,</span><span class="n">myBuff</span><span class="p">(</span><span class="mi">600</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>                     <span class="c1">//Initialisiere Zwischenspeicher
+</span><span class="c1"></span>
+<span class="p">{</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">setupUi</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+
+
+
+    <span class="n">myTimer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QTimer</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="n">connect</span><span class="p">(</span><span class="n">myTimer</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">timeout</span><span class="p">()),</span><span class="k">this</span><span class="p">,</span><span class="n">SLOT</span><span class="p">(</span><span class="n">timeIsUp</span><span class="p">()));</span>
+
+  <span class="c1">//Initialisiere statischen Teil des User-Interfaces
+</span><span class="c1"></span>  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_maxValue</span><span class="o">-&gt;</span><span class="n">setRange</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">100</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_maxValue</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
+
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_minValue</span><span class="o">-&gt;</span><span class="n">setRange</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">100</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_minValue</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="o">-</span><span class="n">scaleMin</span><span class="p">);</span>
+
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_maxValue</span><span class="o">-&gt;</span><span class="n">setNum</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_minValue</span><span class="o">-&gt;</span><span class="n">setNum</span><span class="p">(</span><span class="n">scaleMin</span><span class="p">);</span>
+
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Slider_noise</span><span class="o">-&gt;</span><span class="n">setRange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Slider_noise</span><span class="o">-&gt;</span><span class="n">setEnabled</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">checkBox_run</span><span class="o">-&gt;</span><span class="n">setEnabled</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">checkBox_run</span><span class="o">-&gt;</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcd_maxValue</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcd_minValue</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">scaleMin</span><span class="p">);</span>
+
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Scrollbar_UseData</span><span class="o">-&gt;</span><span class="n">setRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Scrollbar_UseData</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Scrollbar_UseData</span><span class="o">-&gt;</span><span class="n">setPageStep</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="n">MainWindow</span><span class="o">::~</span><span class="n">MainWindow</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span> <span class="n">ui</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_pushStart_clicked</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="n">run</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+   <span class="n">ui</span><span class="o">-&gt;</span><span class="n">checkBox_run</span><span class="o">-&gt;</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+   <span class="n">myTimer</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_pushStop_clicked</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="n">myTimer</span><span class="o">-&gt;</span><span class="n">stop</span><span class="p">();</span>
+   <span class="n">run</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+   <span class="n">ui</span><span class="o">-&gt;</span><span class="n">checkBox_run</span><span class="o">-&gt;</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_pushRestart_clicked</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//Lösche Inhalte Daten-Array und Zwischenspeicher
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">myBuff</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">run</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+    <span class="n">myTimer</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">checkBox_run</span><span class="o">-&gt;</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">paintEvent</span><span class="p">(</span><span class="n">QPaintEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">QPainter</span> <span class="nf">myPainter</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+
+  <span class="n">event</span><span class="o">-&gt;</span><span class="n">ignore</span><span class="p">();</span>
+
+  <span class="c1">//Zeichnen der Mittellinie (Null-Linie)
+</span><span class="c1"></span>  <span class="n">myPainter</span><span class="p">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">green</span><span class="p">);</span>
+  <span class="n">myPainter</span><span class="p">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">(),</span><span class="n">framestart</span><span class="o">+</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">relation</span><span class="p">,</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">(),</span><span class="n">framestart</span><span class="o">+</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">relation</span><span class="p">);</span>
+
+
+   <span class="c1">//Zeichne beschriftetes Array
+</span><span class="c1"></span>   <span class="n">myPainter</span><span class="p">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">black</span><span class="p">);</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">1</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+       <span class="n">myPainter</span><span class="p">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//Focus &amp; Context, Zeichne Positions-Zahlenwert, wenn Mausposition in Frame
+</span><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="n">mousInFrame</span><span class="o">==</span><span class="nb">true</span><span class="p">)</span>
+    <span class="p">{</span>
+       <span class="n">myPainter</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">mPosX</span><span class="p">,</span><span class="n">mPosY</span><span class="p">,</span> <span class="n">QString</span><span class="o">::</span><span class="n">number</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">mWert</span><span class="o">-</span><span class="p">(</span><span class="n">framestart</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span><span class="p">))</span><span class="o">*</span><span class="n">hole</span><span class="o">/</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">timeIsUp</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//Füllen des Zwischenspeichers mit einem Datenwert pro Zyklus
+</span><span class="c1"></span>    <span class="n">myBuff</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="n">myRect</span><span class="p">.</span><span class="n">getData</span><span class="p">());</span>
+
+    <span class="c1">//Beschreibe temporäre und globale Daten
+</span><span class="c1"></span>    <span class="kt">double</span> <span class="n">tmprfw</span> <span class="o">=</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">();</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="kt">double</span><span class="p">((</span><span class="n">tmprfw</span><span class="o">/</span><span class="p">(</span><span class="n">tmprfw</span><span class="o">-</span><span class="n">xScale</span><span class="o">+</span><span class="mi">1</span><span class="p">)));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">delta</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">delta</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">relation</span> <span class="o">=</span> <span class="n">scaleMax</span><span class="o">/-</span><span class="p">(</span><span class="n">scaleMin</span><span class="p">);</span>
+    <span class="n">hole</span> <span class="o">=</span> <span class="n">scaleMax</span> <span class="o">-</span> <span class="n">scaleMin</span><span class="p">;</span>
+    <span class="n">framestart</span><span class="o">=</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">()</span><span class="o">+</span><span class="mi">26</span><span class="p">;</span>
+
+
+    <span class="c1">//Aktualisiere dynamische Beschriftung Y-Achse
+</span><span class="c1"></span>    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_min20</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span><span class="n">framestart</span> <span class="o">-</span><span class="mi">35</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span> <span class="o">+</span> <span class="mi">20</span><span class="o">*</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="n">hole</span><span class="p">);</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">line_min20</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="n">framestart</span> <span class="o">-</span><span class="mi">35</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span> <span class="o">+</span> <span class="mi">20</span><span class="o">*</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="n">hole</span><span class="p">);</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_zero</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="n">framestart</span><span class="o">-</span><span class="mi">35</span><span class="o">+</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">relation</span><span class="p">);</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">line_zero</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="n">framestart</span><span class="o">-</span><span class="mi">35</span><span class="o">+</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">relation</span><span class="p">);</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_max20</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span><span class="n">framestart</span> <span class="o">-</span><span class="mi">35</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span><span class="o">*</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="n">hole</span><span class="p">);</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">line_max20</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="n">framestart</span> <span class="o">-</span><span class="mi">35</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span><span class="o">*</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="n">hole</span><span class="p">);</span>
+
+    <span class="c1">//Beschreibe Array
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">();</span><span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="n">framestart</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span> <span class="o">+</span> <span class="n">myBuff</span><span class="p">.</span><span class="n">getValue</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="n">hole</span><span class="p">;</span>
+
+        <span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span>  <span class="o">-</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">delta</span><span class="p">);</span>
+
+        <span class="c1">//Halte Frame-Grenzen ein
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">())</span>
+        <span class="p">{</span>
+             <span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">())</span>
+        <span class="p">{</span>
+             <span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">framestart</span><span class="p">)</span>
+        <span class="p">{</span>
+             <span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="n">framestart</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">framestart</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">())</span>
+        <span class="p">{</span>
+             <span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="n">framestart</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+    <span class="c1">//Focus &amp; Context, Verarbeitung der übergebenen Mausposition
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">mPosX</span><span class="o">&lt;</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">&amp;&amp;</span><span class="n">mPosX</span><span class="o">&gt;</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">())</span>
+    <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mPosY</span><span class="o">&lt;</span><span class="n">framestart</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">&amp;&amp;</span> <span class="n">mPosY</span><span class="o">&gt;</span><span class="n">framestart</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">mousInFrame</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">();</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mPosX</span><span class="o">&lt;</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span><span class="o">-</span><span class="n">i</span><span class="o">&amp;&amp;</span><span class="n">mPosX</span><span class="o">&gt;</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">()</span><span class="o">+</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><span class="n">delta</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mWert</span> <span class="o">=</span> <span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">mPosX</span> <span class="o">==</span> <span class="n">vX</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">delta</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                 <span class="n">mWert</span> <span class="o">=</span> <span class="n">vY</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+    <span class="k">else</span>
+         <span class="n">mousInFrame</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+         <span class="n">mousInFrame</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+
+    <span class="c1">//Beschrifte LCD-Anzeigen
+</span><span class="c1"></span>    <span class="kt">double</span> <span class="n">actNr</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">vY</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="n">framestart</span> <span class="o">+</span> <span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">relation</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">relation</span><span class="p">))</span><span class="o">*</span><span class="n">hole</span><span class="o">/</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">();</span>
+    <span class="kt">double</span> <span class="n">actNrchill</span> <span class="o">=</span><span class="mi">0</span> <span class="p">;</span>
+    <span class="kt">double</span> <span class="n">noise</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">actNr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">actNrchill</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">//direktes Abgreifen der Daten mit get()-Methoden im Rechteckgenerator möglich
+</span><span class="c1"></span>    <span class="p">}</span>
+
+    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">actNr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">actNrchill</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">;</span> <span class="c1">//direktes Abgreifen der Daten mit get()-Methoden im Rechteckgenerator möglich
+</span><span class="c1"></span>    <span class="p">}</span>
+
+    <span class="n">noise</span> <span class="o">=</span> <span class="o">-</span><span class="n">actNr</span><span class="o">+</span><span class="n">actNrchill</span><span class="p">;</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcdActNum</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">actNr</span><span class="p">);</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcdActNum_chill</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">actNrchill</span><span class="p">);</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Slider_noise</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="n">noise</span><span class="p">);</span>
+    <span class="n">curN</span><span class="o">=</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span><span class="o">-</span><span class="n">xScale</span><span class="p">;</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcdUsedData</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">curN</span><span class="p">);</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcd_delta</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">delta</span><span class="p">);</span>
+
+    <span class="c1">//Locke aktuellen Wert der Einstellungsmöglichkeiten
+</span><span class="c1"></span>    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Scrollbar_UseData</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="n">xScale</span><span class="p">);</span>
+
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_maxValue</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
+    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_minValue</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="o">-</span><span class="n">scaleMin</span><span class="p">);</span>
+
+    <span class="n">repaint</span><span class="p">();</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">QMouseEvent</span> <span class="o">*</span><span class="n">e</span><span class="p">)</span>
+
+<span class="p">{</span>
+    <span class="n">mPosX</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">();</span>
+    <span class="n">mPosY</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">();</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_dial_maxValue_valueChanged</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">run</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scaleMax</span><span class="o">=</span><span class="n">value</span><span class="p">;</span>
+        <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcd_maxValue</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
+        <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_maxValue</span><span class="o">-&gt;</span><span class="n">setNum</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_dial_minValue_valueChanged</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">run</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scaleMin</span> <span class="o">=</span> <span class="o">-</span><span class="n">value</span><span class="p">;</span>
+        <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcd_minValue</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">scaleMin</span><span class="p">);</span>
+        <span class="n">ui</span><span class="o">-&gt;</span><span class="n">label_minValue</span><span class="o">-&gt;</span><span class="n">setNum</span><span class="p">(</span><span class="n">scaleMin</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_Scrollbar_UseData_sliderMoved</span><span class="p">(</span><span class="kt">int</span> <span class="n">position</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">run</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">xScale</span> <span class="o">=</span> <span class="n">position</span><span class="p">;</span>
+        <span class="n">curN</span><span class="o">=</span><span class="n">ui</span><span class="o">-&gt;</span><span class="n">frame</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">()</span><span class="o">-</span><span class="n">xScale</span><span class="p">;</span>
+        <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcdUsedData</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">curN</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">on_pushQuit_clicked</span><span class="p">()</span>
+<span class="p">{</span>
+     <span class="n">QApplication</span><span class="o">::</span><span class="n">exit</span><span class="p">();</span>
+<span class="p">}</span>
+
+
+</code></pre></div>
+  </article>
+
+  <br/>
+
+  
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  
+  
+</section>
+
+      </div>
+      
+    </main>
+
+    
+
+  <script src="/js/app.js"></script>
+  
+  </body>
+</html>

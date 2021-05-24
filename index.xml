@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christopher Voigtmann</title>
+    <link>https://chrisvoi.github.io/</link>
+    <description>Recent content on Christopher Voigtmann</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 15 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://chrisvoi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Spirograph</title>
+      <link>https://chrisvoi.github.io/posts/java-sprio/</link>
+      <pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://chrisvoi.github.io/posts/java-sprio/</guid>
+      <description>Ein Spirograph ist ein geometrisches Spielzeug, mit dem man aus mehreren Zahnrädern Muster und Kurven zeichnen kann. Diese Kurven lassen sich auch mathematisch Darstellen, wie im folgenden Code zu sehen ist.
+Code Spirograph import java.awt.*; import java.lang.Math; import javax.swing.JComponent; public class Spirograph extends JComponent // Erweitert JComponent { //Anlegen der genutzten Datentypen in &amp;#34;zeichnender&amp;#34; Klasse 	private double zahn1, zahn2, t; private int rad1, rad2; private int [] x, y; //Array für Polygon-Zeichnung 	private int steps = 800; // Schrittweite, bzw.</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; Signalgenerator</title>
+      <link>https://chrisvoi.github.io/posts/cpp-rectsign/</link>
+      <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://chrisvoi.github.io/posts/cpp-rectsign/</guid>
+      <description>Mit der Programmierumgebung QT habe ich einen Rechtecksignal-Generator erstellt. Wie dieser im Detail funktioniert, ist in dem Post für den Signalgenarator auf Java Basis zu sehen. Bei QT ging es viel mehr um die Erstellung eines User-Interfaces mit Hilfe der vorgegebenen Zeichenmöglichkeiten. Daher ist hier auch nur der Code für das &amp;ldquo;Mainwindow&amp;rdquo; zu sehen.
+Code Mainwindow Header #ifndef MAINWINDOW_H #define MAINWINDOW_H  #include &amp;lt;QMainWindow&amp;gt;#include &amp;#34;rectangleData.h&amp;#34;#include &amp;#34;dataBuffer.h&amp;#34;#include &amp;lt;QTimer&amp;gt;#include &amp;lt;QPaintEvent&amp;gt;#include &amp;lt;QPainter&amp;gt;#include &amp;lt;QMouseEvent&amp;gt; QT_BEGIN_NAMESPACE namespace Ui { class MainWindow; } QT_END_NAMESPACE class MainWindow : public QMainWindow { Q_OBJECT public: MainWindow(QWidget *parent = nullptr); ~MainWindow(); private slots: void on_pushStart_clicked(); void on_pushStop_clicked(); void on_pushRestart_clicked(); Code Mainwindow Main #include &amp;#34;mainwindow.</description>
+    </item>
+    
+    <item>
+      <title>Java Signalgenerator</title>
+      <link>https://chrisvoi.github.io/posts/java-oszi/</link>
+      <pubDate>Thu, 05 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://chrisvoi.github.io/posts/java-oszi/</guid>
+      <description>Das Projekt für die Darstellung einer Oszilloskope Frontblende bestand aus Fünf Teilaufgaben. Mein Teil bestand aus der Verarbeitung und Visualisierung der Werte eines vorgegebenen &amp;ldquo;Data-Buffers&amp;rdquo;, bwz. eines Signalgenerators. Interessant war dabei die Umsetzung des Ringspeichers in den Graphen und die Wertweitergabe im Array.
+Code DataBuffer public class DataBuffer { private double [] data; private int size, index; private long count; public DataBuffer (int n) { data = new double [n]; size = n; index = 0; count = 0; } public void input (double value) { index = (index + 1) % size; data [index] = value; count++; } public double getValue (int i) { if (i &amp;lt; size) { int k = (index - i + size) % size; return data [k]; } return 0.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://chrisvoi.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://chrisvoi.github.io/about/</guid>
+      <description>Herzlich Willkomen auf meiner Seite! Ich bin Christopher, 1991 geboren und zur Zeit Elektrotechnik Student an der Hochschule Rhein-Main. Nach meiner Ausbildung zum Elektroniker für Automatisierungstechnik und dem jetzigen Studium möchte ich meine Informatik Kenntnisse im Bereich Softwareentwicklung weiter vertiefen. Aktuell arbeite ich an einem Teamprojekt, welches ein &amp;ldquo;Vier-Gewinnt&amp;rdquo;-Spiel auf Java Codebasis beinhaltet. Dabei werden neben der GUI für das Spiel noch eine KI nach Alpha-Beta Algorithmus und eine Netzwerkanbindung für zwei Mitspieler entwickelt.</description>
+    </item>
+    
+    <item>
+      <title>Competences</title>
+      <link>https://chrisvoi.github.io/competences/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://chrisvoi.github.io/competences/</guid>
+      <description>Die Informatik-Anteile des Elektrotechnik-Studiums erstrecken sich über prozedulare und objektorientierte Softwareentwicklung mit C++ bis hin zur Medienprogrammierung mit Java. Explizit habe ich dabei folgende Fächer belegt:
+ Prozedurale Softwareentwicklung (Praktikum und Klausur)   Objektorientierte Softwareentwicklung (Praktikum und Klausur) Computernetworking I+II (Praktikum und Klausur) Mikrocomputertechnik und Embedded Systems (mit ersten Erfahrungen zum Linux Betriebssystem Ubuntu) Vertiefung Software Engineering (Klausur) Medienprogrammierung mit Java (Praktikum und Klausur) Mensch-Maschine-Schnittstelle (Hauptaugenmerk auf erweiterte GUI)  Verwendete Porgrammierumgebungen dabei waren Visual Studios, Eclipse, QT und Notepad++.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://chrisvoi.github.io/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://chrisvoi.github.io/contact/</guid>
+      <description>E-mail: Christopher.Voigtmann@t-online.de
+Telefon: +491773318729</description>
+    </item>
+    
+  </channel>
+</rss>
