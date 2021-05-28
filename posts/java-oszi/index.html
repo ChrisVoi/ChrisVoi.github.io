@@ -11,7 +11,7 @@
 
     <meta property="og:site_name" content="Christopher Voigtmann">
     <meta property="og:title" content="
-  Java Signalgenerator - Christopher Voigtmann
+  Java Signalgenerator (Eclipse) - Christopher Voigtmann
 ">
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
@@ -23,7 +23,7 @@
 
     <base href="https://chrisvoi.github.io/posts/java-oszi/">
     <title>
-  Java Signalgenerator - Christopher Voigtmann
+  Java Signalgenerator (Eclipse) - Christopher Voigtmann
 </title>
 
     <link rel="canonical" href="https://chrisvoi.github.io/posts/java-oszi/">
@@ -87,7 +87,7 @@
   <section class="container post">
   <article>
     <header>
-      <h1 class="title">Java Signalgenerator</h1>
+      <h1 class="title">Java Signalgenerator (Eclipse)</h1>
       <h2 class="date">March 5, 2020</h2>
 
       
@@ -132,162 +132,162 @@ Interessant war dabei die Umsetzung des Ringspeichers in den Graphen und die Wer
     <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getCount</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">count</span><span class="o">;</span> <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div><h5 id="code-dataview">Code DataView</h5>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">import javax.swing.*;
-import java.awt.*;
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kn">import</span> <span class="nn">javax.swing.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.*</span><span class="o">;</span>
 
 
 
-//Objekt der Klasse Databuffer
-public class DataView extends JComponent {
+<span class="c1">//Objekt der Klasse Databuffer
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataView</span> <span class="kd">extends</span> <span class="n">JComponent</span> <span class="o">{</span>
 
-private DataBuffer data;
-private int steps;
-private double deltat;
-private double ymin, ymax;
-private int mode;
-private int [] x, y;
-
-
-public DataView (DataBuffer db, int stps, double dt, double ymi, double yma, int mod)
-{
-setPreferredSize (new Dimension (850, 500));
-data = db; //DataBuffer, der angezeigt wird
-steps = stps; //Anzahl der Werte, die angezeigt werden - 1. Sollte kleiner als der size-Wert des DataBuffers sein.
-deltat = dt; //Zeitdifferenz von einem Wert zum nächsten
-ymin = ymi; //Minimaler und maximaler darstellbarer Wert
-ymax = yma;
-mode = mod; //Anzeigemode (0 oder 1)
-x = new int [steps];
-y = new int [steps];
+<span class="kd">private</span> <span class="n">DataBuffer</span> <span class="n">data</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">int</span> <span class="n">steps</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">double</span> <span class="n">deltat</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">double</span> <span class="n">ymin</span><span class="o">,</span> <span class="n">ymax</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">int</span> <span class="n">mode</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">int</span> <span class="o">[]</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">;</span>
 
 
-}
+<span class="kd">public</span> <span class="nf">DataView</span> <span class="o">(</span><span class="n">DataBuffer</span> <span class="n">db</span><span class="o">,</span> <span class="kt">int</span> <span class="n">stps</span><span class="o">,</span> <span class="kt">double</span> <span class="n">dt</span><span class="o">,</span> <span class="kt">double</span> <span class="n">ymi</span><span class="o">,</span> <span class="kt">double</span> <span class="n">yma</span><span class="o">,</span> <span class="kt">int</span> <span class="n">mod</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="n">setPreferredSize</span> <span class="o">(</span><span class="k">new</span> <span class="n">Dimension</span> <span class="o">(</span><span class="n">850</span><span class="o">,</span> <span class="n">500</span><span class="o">));</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">db</span><span class="o">;</span> <span class="c1">//DataBuffer, der angezeigt wird
+</span><span class="c1"></span><span class="n">steps</span> <span class="o">=</span> <span class="n">stps</span><span class="o">;</span> <span class="c1">//Anzahl der Werte, die angezeigt werden - 1. Sollte kleiner als der Size-Wert des DataBuffers sein.
+</span><span class="c1"></span><span class="n">deltat</span> <span class="o">=</span> <span class="n">dt</span><span class="o">;</span> <span class="c1">//Zeitdifferenz von einem Wert zum Nächsten
+</span><span class="c1"></span><span class="n">ymin</span> <span class="o">=</span> <span class="n">ymi</span><span class="o">;</span> <span class="c1">//minimaler und maximaler darstellbarer Wert
+</span><span class="c1"></span><span class="n">ymax</span> <span class="o">=</span> <span class="n">yma</span><span class="o">;</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="n">mod</span><span class="o">;</span> <span class="c1">//Anzeigemode (0 oder 1)
+</span><span class="c1"></span><span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">[</span><span class="n">steps</span><span class="o">];</span>
+<span class="n">y</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">[</span><span class="n">steps</span><span class="o">];</span>
 
 
-public void paintComponent (Graphics g)
-{
-
-Graphics2D g2 = (Graphics2D) g; //Grafik-Kontext holen
-
-//Rechteck (Rahmen) fuer Werte definieren
-g2.setPaint (Color.black);
-g2.setStroke (new BasicStroke (2));
-int h = (int)ymax + 1 - (int)ymin +1;
-int b = (int)steps+1;
-int x0 = 100;
-int y0 = 100;
-g2.drawRect ( x0,y0, b, h);
-g2.setStroke (new BasicStroke (2));
-g2.drawLine (x0, (int) (ymax) + y0, x0 + b,(int)(ymax) + y0);
-String str;
-
-str = String.valueOf(steps+1);
-g2.drawString(str, x0-20, y0+h+20);
-
-str = String.valueOf(0);
-g2.drawString(str,b+x0-10, y0+h+20);
-
-str = String.valueOf(ymin);
-g2.drawString(str,b+x0+10, y0+h-5);
-
-str = String.valueOf(ymax);
-g2.drawString(str,b+x0+10, y0+5);
+<span class="o">}</span>
 
 
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">paintComponent</span> <span class="o">(</span><span class="n">Graphics</span> <span class="n">g</span><span class="o">)</span>
+<span class="o">{</span>
+
+<span class="n">Graphics2D</span> <span class="n">g2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Graphics2D</span><span class="o">)</span> <span class="n">g</span><span class="o">;</span> <span class="c1">//Grafik-Kontext holen
+</span><span class="c1"></span>
+<span class="c1">//Rechteck (Rahmen) fuer Werte definieren
+</span><span class="c1"></span><span class="n">g2</span><span class="o">.</span><span class="na">setPaint</span> <span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">black</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">setStroke</span> <span class="o">(</span><span class="k">new</span> <span class="n">BasicStroke</span> <span class="o">(</span><span class="n">2</span><span class="o">));</span>
+<span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">ymax</span> <span class="o">+</span> <span class="n">1</span> <span class="o">-</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">ymin</span> <span class="o">+</span><span class="n">1</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">steps</span><span class="o">+</span><span class="n">1</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">x0</span> <span class="o">=</span> <span class="n">100</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">100</span><span class="o">;</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawRect</span> <span class="o">(</span> <span class="n">x0</span><span class="o">,</span><span class="n">y0</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">h</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">setStroke</span> <span class="o">(</span><span class="k">new</span> <span class="n">BasicStroke</span> <span class="o">(</span><span class="n">2</span><span class="o">));</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawLine</span> <span class="o">(</span><span class="n">x0</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">ymax</span><span class="o">)</span> <span class="o">+</span> <span class="n">y0</span><span class="o">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">b</span><span class="o">,(</span><span class="kt">int</span><span class="o">)(</span><span class="n">ymax</span><span class="o">)</span> <span class="o">+</span> <span class="n">y0</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">str</span><span class="o">;</span>
+
+<span class="n">str</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">steps</span><span class="o">+</span><span class="n">1</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">x0</span><span class="o">-</span><span class="n">20</span><span class="o">,</span> <span class="n">y0</span><span class="o">+</span><span class="n">h</span><span class="o">+</span><span class="n">20</span><span class="o">);</span>
+
+<span class="n">str</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="n">str</span><span class="o">,</span><span class="n">b</span><span class="o">+</span><span class="n">x0</span><span class="o">-</span><span class="n">10</span><span class="o">,</span> <span class="n">y0</span><span class="o">+</span><span class="n">h</span><span class="o">+</span><span class="n">20</span><span class="o">);</span>
+
+<span class="n">str</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ymin</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="n">str</span><span class="o">,</span><span class="n">b</span><span class="o">+</span><span class="n">x0</span><span class="o">+</span><span class="n">10</span><span class="o">,</span> <span class="n">y0</span><span class="o">+</span><span class="n">h</span><span class="o">-</span><span class="n">5</span><span class="o">);</span>
+
+<span class="n">str</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">ymax</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="n">str</span><span class="o">,</span><span class="n">b</span><span class="o">+</span><span class="n">x0</span><span class="o">+</span><span class="n">10</span><span class="o">,</span> <span class="n">y0</span><span class="o">+</span><span class="n">5</span><span class="o">);</span>
 
 
-if(mode==0)
-{
-// Werte mittels Polyline als Graf zeichnen
-// Koordinaten in Feld schreiben:
 
 
-	for (int i = 0; i &lt; steps; i++)
-	{
+<span class="k">if</span><span class="o">(</span><span class="n">mode</span><span class="o">==</span><span class="n">0</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="c1">// Werte mittels Polyline als Graph zeichnen
+</span><span class="c1">// Koordinaten in Feld schreiben:
+</span><span class="c1"></span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">steps</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+	<span class="o">{</span>
 	
 
 
-	y [i] = (int) (ymax+y0 - h/2 *data.getValue(i) );
-	x [i] = x0+b -(((int)deltat+i));
-	}
+	<span class="n">y</span> <span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">ymax</span><span class="o">+</span><span class="n">y0</span> <span class="o">-</span> <span class="n">h</span><span class="o">/</span><span class="n">2</span> <span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">);</span>
+	<span class="n">x</span> <span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">x0</span><span class="o">+</span><span class="n">b</span> <span class="o">-(((</span><span class="kt">int</span><span class="o">)</span><span class="n">deltat</span><span class="o">+</span><span class="n">i</span><span class="o">));</span>
+	<span class="o">}</span>
 
 
 
-g2.setPaint (Color.blue);
-g2.setStroke (new BasicStroke (1));
-g2.drawPolyline (x, y, steps); // Funktion zeichnen
-
-}
-if (mode==1)
-{
-	int s = (int) ((data.getCount () % steps));
+<span class="n">g2</span><span class="o">.</span><span class="na">setPaint</span> <span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">blue</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">setStroke</span> <span class="o">(</span><span class="k">new</span> <span class="n">BasicStroke</span> <span class="o">(</span><span class="n">1</span><span class="o">));</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawPolyline</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">steps</span><span class="o">);</span> <span class="c1">// Funktion zeichnen
+</span><span class="c1"></span>
+<span class="o">}</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">mode</span><span class="o">==</span><span class="n">1</span><span class="o">)</span>
+<span class="o">{</span>
+	<span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">((</span><span class="n">data</span><span class="o">.</span><span class="na">getCount</span> <span class="o">()</span> <span class="o">%</span> <span class="n">steps</span><span class="o">));</span>
 	
 	  
-	for (int j = 0; j &lt; s; j++)
-	{
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span>
+	<span class="o">{</span>
 		
 	
 		
 		 
-	y [j] = (int) (y0+ymax+h/2*data.getValue((int) (+(data.getCount () % steps))-j) );
+	<span class="n">y</span> <span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">y0</span><span class="o">+</span><span class="n">ymax</span><span class="o">+</span><span class="n">h</span><span class="o">/</span><span class="n">2</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="na">getValue</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="o">(+(</span><span class="n">data</span><span class="o">.</span><span class="na">getCount</span> <span class="o">()</span> <span class="o">%</span> <span class="n">steps</span><span class="o">))-</span><span class="n">j</span><span class="o">)</span> <span class="o">);</span>
 	
-	x [j] = x0 +(((int)j));
+	<span class="n">x</span> <span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+(((</span><span class="kt">int</span><span class="o">)</span><span class="n">j</span><span class="o">));</span>
 	
 	
 
-	}
-	g2.setPaint (Color.blue);
-	g2.setStroke (new BasicStroke (1));
-	g2.drawPolyline (x, y, s);
+	<span class="o">}</span>
+	<span class="n">g2</span><span class="o">.</span><span class="na">setPaint</span> <span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">blue</span><span class="o">);</span>
+	<span class="n">g2</span><span class="o">.</span><span class="na">setStroke</span> <span class="o">(</span><span class="k">new</span> <span class="n">BasicStroke</span> <span class="o">(</span><span class="n">1</span><span class="o">));</span>
+	<span class="n">g2</span><span class="o">.</span><span class="na">drawPolyline</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
 	
 	
-	for (int j=s;j&lt;steps;j++)
-	{
-		int k = j-s;
-		y [k] = (int) (y0+ymax+h/2*data.getValue((int) (s+steps-j)));
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">s</span><span class="o">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">steps</span><span class="o">;</span><span class="n">j</span><span class="o">++)</span>
+	<span class="o">{</span>
+		<span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span><span class="o">-</span><span class="n">s</span><span class="o">;</span>
+		<span class="n">y</span> <span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">y0</span><span class="o">+</span><span class="n">ymax</span><span class="o">+</span><span class="n">h</span><span class="o">/</span><span class="n">2</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="na">getValue</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">s</span><span class="o">+</span><span class="n">steps</span><span class="o">-</span><span class="n">j</span><span class="o">)));</span>
 		
-		x [k] = x0 +(((int)deltat+j));
+		<span class="n">x</span> <span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+(((</span><span class="kt">int</span><span class="o">)</span><span class="n">deltat</span><span class="o">+</span><span class="n">j</span><span class="o">));</span>
 		
-	}
+	<span class="o">}</span>
 	
 
 
 
-g2.setPaint (Color.red);
-g2.setStroke (new BasicStroke (1));
-g2.drawPolyline (x, y, steps-s); // Funktion zeichnen
-
-g2.setPaint(Color.gray);
-g2.setStroke (new BasicStroke (3));
-g2.drawLine(x0+s, y0, x0+s, (int)(y0+ymax-ymin) );
+<span class="n">g2</span><span class="o">.</span><span class="na">setPaint</span> <span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">red</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">setStroke</span> <span class="o">(</span><span class="k">new</span> <span class="n">BasicStroke</span> <span class="o">(</span><span class="n">1</span><span class="o">));</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawPolyline</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">steps</span><span class="o">-</span><span class="n">s</span><span class="o">);</span> <span class="c1">// Funktion zeichnen
+</span><span class="c1"></span>
+<span class="n">g2</span><span class="o">.</span><span class="na">setPaint</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">gray</span><span class="o">);</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">setStroke</span> <span class="o">(</span><span class="k">new</span> <span class="n">BasicStroke</span> <span class="o">(</span><span class="n">3</span><span class="o">));</span>
+<span class="n">g2</span><span class="o">.</span><span class="na">drawLine</span><span class="o">(</span><span class="n">x0</span><span class="o">+</span><span class="n">s</span><span class="o">,</span> <span class="n">y0</span><span class="o">,</span> <span class="n">x0</span><span class="o">+</span><span class="n">s</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">y0</span><span class="o">+</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="o">)</span> <span class="o">);</span>
 	
-}
-}
+<span class="o">}</span>
+<span class="o">}</span>
 
-void setBuffer (DataBuffer db)
-{
-data = db;
-}
+<span class="kt">void</span> <span class="nf">setBuffer</span> <span class="o">(</span><span class="n">DataBuffer</span> <span class="n">db</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">db</span><span class="o">;</span>
+<span class="o">}</span>
 
-void setTRange (int stps, double dt)
-{
-steps = stps;
-deltat = dt;
-}
+<span class="kt">void</span> <span class="nf">setTRange</span> <span class="o">(</span><span class="kt">int</span> <span class="n">stps</span><span class="o">,</span> <span class="kt">double</span> <span class="n">dt</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="n">stps</span><span class="o">;</span>
+<span class="n">deltat</span> <span class="o">=</span> <span class="n">dt</span><span class="o">;</span>
+<span class="o">}</span>
 
-void setYRange (double ymi, double yma)
-{
-ymin = ymi;
-ymax = yma;
+<span class="kt">void</span> <span class="nf">setYRange</span> <span class="o">(</span><span class="kt">double</span> <span class="n">ymi</span><span class="o">,</span> <span class="kt">double</span> <span class="n">yma</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="n">ymin</span> <span class="o">=</span> <span class="n">ymi</span><span class="o">;</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="n">yma</span><span class="o">;</span>
 
-}
+<span class="o">}</span>
 
-void setMode (int mod)
-{
-mode = mod;
-}
+<span class="kt">void</span> <span class="nf">setMode</span> <span class="o">(</span><span class="kt">int</span> <span class="n">mod</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="n">mod</span><span class="o">;</span>
+<span class="o">}</span>
 
-}
+<span class="o">}</span>
 
 </code></pre></div><h5 id="code-dataviewtest">Code DataViewTest</h5>
 <div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kn">import</span> <span class="nn">java.awt.event.*</span><span class="o">;</span>

@@ -8,7 +8,7 @@
     <language>en</language>
     <lastBuildDate>Mon, 15 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://chrisvoi.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Java Spirograph</title>
+      <title>Java Spirograph (Eclipse)</title>
       <link>https://chrisvoi.github.io/posts/java-sprio/</link>
       <pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate>
       
@@ -18,17 +18,16 @@ Code Spirograph import java.awt.*; import java.lang.Math; import javax.swing.JCo
     </item>
     
     <item>
-      <title>C&#43;&#43; Signalgenerator</title>
+      <title>C&#43;&#43; Signalgenerator (QT)</title>
       <link>https://chrisvoi.github.io/posts/cpp-rectsign/</link>
       <pubDate>Fri, 18 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>https://chrisvoi.github.io/posts/cpp-rectsign/</guid>
-      <description>Mit der Programmierumgebung QT habe ich einen Rechtecksignal-Generator erstellt. Wie dieser im Detail funktioniert, ist in dem Post für den Signalgenarator auf Java Basis zu sehen. Bei QT ging es viel mehr um die Erstellung eines User-Interfaces mit Hilfe der vorgegebenen Zeichenmöglichkeiten. Daher ist hier auch nur der Code für das &amp;ldquo;Mainwindow&amp;rdquo; zu sehen.
-Code Mainwindow Header #ifndef MAINWINDOW_H #define MAINWINDOW_H  #include &amp;lt;QMainWindow&amp;gt;#include &amp;#34;rectangleData.h&amp;#34;#include &amp;#34;dataBuffer.h&amp;#34;#include &amp;lt;QTimer&amp;gt;#include &amp;lt;QPaintEvent&amp;gt;#include &amp;lt;QPainter&amp;gt;#include &amp;lt;QMouseEvent&amp;gt; QT_BEGIN_NAMESPACE namespace Ui { class MainWindow; } QT_END_NAMESPACE class MainWindow : public QMainWindow { Q_OBJECT public: MainWindow(QWidget *parent = nullptr); ~MainWindow(); private slots: void on_pushStart_clicked(); void on_pushStop_clicked(); void on_pushRestart_clicked(); Code Mainwindow Main #include &amp;#34;mainwindow.</description>
+      <description>Mit der Programmierumgebung QT habe ich einen Rechtecksignal-Generator erstellt. Wie dieser im Detail funktioniert, ist in dem Post für den Signalgenarator auf Java Basis zu sehen. Bei QT ging es viel mehr um die Erstellung eines User-Interfaces mit Hilfe der vorgegebenen Zeichnungsmöglichkeiten. Daher ist hier auch nur der Code für das &amp;ldquo;Mainwindow&amp;rdquo; zu sehen. Ziel war es, die Präsentation der Datenwerte nach dem &amp;ldquo;Focus and Context&amp;rdquo; Prinzip zu gestalten. Dabei soll eine Überblicksdarstellung erhalten bleiben (Context) und eine vergrößerte Ansicht (Focus) inmitten des Kontexts möglich sein, um einen nahtlosen Übergang zu erschaffen.</description>
     </item>
     
     <item>
-      <title>Java Signalgenerator</title>
+      <title>Java Signalgenerator (Eclipse)</title>
       <link>https://chrisvoi.github.io/posts/java-oszi/</link>
       <pubDate>Thu, 05 Mar 2020 00:00:00 +0000</pubDate>
       

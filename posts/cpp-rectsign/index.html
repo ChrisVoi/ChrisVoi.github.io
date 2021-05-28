@@ -11,7 +11,7 @@
 
     <meta property="og:site_name" content="Christopher Voigtmann">
     <meta property="og:title" content="
-  C&#43;&#43; Signalgenerator - Christopher Voigtmann
+  C&#43;&#43; Signalgenerator (QT) - Christopher Voigtmann
 ">
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
@@ -23,7 +23,7 @@
 
     <base href="https://chrisvoi.github.io/posts/cpp-rectsign/">
     <title>
-  C&#43;&#43; Signalgenerator - Christopher Voigtmann
+  C&#43;&#43; Signalgenerator (QT) - Christopher Voigtmann
 </title>
 
     <link rel="canonical" href="https://chrisvoi.github.io/posts/cpp-rectsign/">
@@ -87,14 +87,14 @@
   <section class="container post">
   <article>
     <header>
-      <h1 class="title">C&#43;&#43; Signalgenerator</h1>
+      <h1 class="title">C&#43;&#43; Signalgenerator (QT)</h1>
       <h2 class="date">September 18, 2020</h2>
 
       
     </header>
 
     <p><img src="/images/qtrect.JPG" alt="qtrect"></p>
-<p>Mit der Programmierumgebung QT habe ich einen Rechtecksignal-Generator erstellt. Wie dieser im Detail funktioniert, ist in dem Post für den Signalgenarator auf Java Basis zu sehen. Bei QT ging es viel mehr um die Erstellung eines User-Interfaces mit Hilfe der vorgegebenen Zeichenmöglichkeiten. Daher ist hier auch nur der Code für das &ldquo;Mainwindow&rdquo; zu sehen.</p>
+<p>Mit der Programmierumgebung QT habe ich einen Rechtecksignal-Generator erstellt. Wie dieser im Detail funktioniert, ist in dem Post für den Signalgenarator auf Java Basis zu sehen. Bei QT ging es viel mehr um die Erstellung eines User-Interfaces mit Hilfe der vorgegebenen Zeichnungsmöglichkeiten. Daher ist hier auch nur der Code für das &ldquo;Mainwindow&rdquo; zu sehen.  Ziel war es, die Präsentation der Datenwerte nach dem &ldquo;Focus and Context&rdquo; Prinzip zu gestalten. Dabei soll eine Überblicksdarstellung erhalten bleiben (Context) und eine vergrößerte Ansicht (Focus) inmitten des Kontexts möglich sein, um einen nahtlosen Übergang zu erschaffen. Bei Durchqueren der Darstellung mit dem Maus-Cursor erhalten wir zusätzliche Details durch eine Wertanzeige.</p>
 <h5 id="code-mainwindow-header">Code Mainwindow Header</h5>
 <div class="highlight"><pre class="chroma"><code class="language-cpp" data-lang="cpp">
 <span class="cp">#ifndef MAINWINDOW_H
@@ -336,13 +336,13 @@
 
     <span class="k">if</span> <span class="p">(</span><span class="n">actNr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">actNrchill</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">//direktes Abgreifen der Daten mit get()-Methoden im Rechteckgenerator möglich
-</span><span class="c1"></span>    <span class="p">}</span>
+        <span class="n">actNrchill</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+    <span class="p">}</span>
 
     <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">actNr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">actNrchill</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">;</span> <span class="c1">//direktes Abgreifen der Daten mit get()-Methoden im Rechteckgenerator möglich
-</span><span class="c1"></span>    <span class="p">}</span>
+        <span class="n">actNrchill</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">;</span> 
+    <span class="p">}</span>
 
     <span class="n">noise</span> <span class="o">=</span> <span class="o">-</span><span class="n">actNr</span><span class="o">+</span><span class="n">actNrchill</span><span class="p">;</span>
 
@@ -354,7 +354,7 @@
     <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcdUsedData</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">curN</span><span class="p">);</span>
     <span class="n">ui</span><span class="o">-&gt;</span><span class="n">lcd_delta</span><span class="o">-&gt;</span><span class="n">display</span><span class="p">(</span><span class="n">delta</span><span class="p">);</span>
 
-    <span class="c1">//Locke aktuellen Wert der Einstellungsmöglichkeiten
+    <span class="c1">//Logge aktuellen Wert der Einstellungsmöglichkeiten
 </span><span class="c1"></span>    <span class="n">ui</span><span class="o">-&gt;</span><span class="n">Scrollbar_UseData</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="n">xScale</span><span class="p">);</span>
 
     <span class="n">ui</span><span class="o">-&gt;</span><span class="n">dial_maxValue</span><span class="o">-&gt;</span><span class="n">setValue</span><span class="p">(</span><span class="n">scaleMax</span><span class="p">);</span>
